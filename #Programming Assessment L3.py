@@ -7,6 +7,7 @@ from tkinter import *
 from tkinter import ttk
 
 #-------------------------------|Windows|-------------------------------
+#Orders window
 root = Tk()
 root.title("Orders")
 
