@@ -16,13 +16,13 @@ orders = StringVar()
 orders.set("Orders") #This will make changes to code easier
 
 #Will change pack() to grid() in later version
-OrdersLabel = Label(root, textvariable=orders, justify="center")
+OrdersLabel = Label(root, textvariable=orders, justify='center')
 OrdersLabel.pack()
 
-OrdersButton = Button(root, textvariable=orders, justify="left")
+OrdersButton = Button(root, textvariable=orders, justify='left')
 OrdersButton.pack()
 
-AddOrder = Button(root, text="Add Order", justify="left") #will be used to add orders in later version
+AddOrder = Button(root, text="Add Order", justify='left') #will be used to add orders in later version
 AddOrder.pack()
 
 #-------------------------------|Mainloop|-------------------------------
