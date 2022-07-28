@@ -13,9 +13,13 @@ root = Tk()
 root.title("Orders")
 root.geometry("500x500")#might change this later
 
+#-------------------------------|Variables|-----------------------------
+OrdersVar = StringVar()
+OrdersVar.set("Orders")
+
 #-------------------------------|Widgets|-------------------------------
 #Will change pack() to grid() in later version
-OrdersLabel = Label(root, text="Orders", justify='center')
+OrdersLabel = Label(root, textvariable=OrdersVar, justify='center')
 OrdersLabel.pack()
 
 #Create Frame
@@ -83,5 +87,5 @@ menu1.add_cascade(label="File", menu=file_menu)
 file_menu.add_command(label="Save", command=save_list)
 #Possibly add a "Save As" option?
 
-#-------------------------------|Mainloop|-------------------------------
+#-------------------------------|Mainloop|------------------------------
 root.mainloop()
