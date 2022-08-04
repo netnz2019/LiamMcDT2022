@@ -6,6 +6,7 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import dialog
+from tkinter import filedialog
 import csv #better than excel
 
 #-------------------------------|Windows|-------------------------------
@@ -25,7 +26,14 @@ filepath = 'ProductList.csv'
 File = open(filepath)
 Reader = csv.reader(File)
 Data = list(Reader)
-print(Data)
+del(Data[0]) # gets rid of header row
+
+#Create Order list
+Orders = [] 
+#Add order list
+for order in list(range(0, len(Data))):
+    Orders.append(Data[order][0])
+var = StringVar(value = Orders)
 
 #-------------------------------|Widgets|-------------------------------
 #Will change pack() to grid() in later version
@@ -48,12 +56,6 @@ order_list = Listbox(order_frame,
     )
 
 order_list.pack(side=LEFT, fill=BOTH)
-
-#Create Order list
-Orders = [] 
-#Add order list
-for Order in Orders:
-    order_list.insert(END, Order)
 
 #Add scrollbar
 order_scrollbar = Scrollbar(order_frame)
@@ -79,6 +81,19 @@ def delete_order():
 
 #Menu functions
 def save_list():
+    file_name = filedialog.asksaveasfilename(
+        title="Save File",
+        filetypes=(("Dat Files", "*.dat"), ("All Files", "*.*"))
+        )
+    if file_name:
+        if file_name.endswith(".dat"):
+            pass
+        else:
+            file_name = f'{file_name}.dat'
+        
+    #Grab all the orders from the list
+    orders = order_list.get(0, END)
+def open_list():
     pass
 
 #Add & delete buttons
@@ -95,6 +110,7 @@ root.config(menu=my_menu)
 file_menu = Menu(my_menu, tearoff=False)
 my_menu.add_cascade(label="File", menu=file_menu)
 file_menu.add_command(label="Save", command=save_list) #Dropdown option
+file_menu.add_command(label="open", command=open_list)
 
 #-------------------------------|Mainloop|------------------------------
 root.mainloop()
