@@ -8,6 +8,7 @@ from tkinter import ttk
 from tkinter import dialog
 from tkinter import filedialog
 import csv #better than excel
+import pickle
 
 #-------------------------------|Windows|-------------------------------
 #Orders window
@@ -93,8 +94,32 @@ def save_list():
         
     #Grab all the orders from the list
     orders = order_list.get(0, END)
+
+    #Open file
+    output_file = open(file_name, 'wb')
+
+    #Actually add the stuff to the file
+    pickle.dump(orders, output_file)
+
 def open_list():
-    pass
+    file_name = filedialog.askopenfilename(
+        title="Open File",
+        filetypes=(("Dat Files", "*.dat"), ("All Files", "*.*"))
+        )
+    
+    if file_name:
+        #Delete currently open file
+        order_list.delete(0, END)
+
+        #Open File
+        input_file = open(file_name, 'rb')
+
+        #Load date
+        orders = pickle.load(input_file)
+
+        #Output order to the screen
+        for order in orders:
+            order_list.insert(END, order)
 
 #Add & delete buttons
 add_button = Button(button_frame, text="Add Order", command=add_order)
