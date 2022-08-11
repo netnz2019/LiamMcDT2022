@@ -16,6 +16,54 @@ root = Tk()
 root.title("Orders")
 root.geometry("500x500")#might change this later
 
+#------------------------------|Functions|------------------------------
+#Button Functions
+def add_order():
+    order_list.insert(END, order_entry.get())
+    order_entry.delete(0, END) #Gets rid of whatever is in the entry.
+def delete_order():
+    order_list.delete(ANCHOR)
+
+#Menu functions
+def save_list():
+    file_name = filedialog.asksaveasfilename(
+        title="Save File",
+        filetypes=(("Dat Files", "*.dat"), ("All Files", "*.*"))
+        )
+    if file_name:
+        if file_name.endswith(".dat"):
+            pass
+        else:
+            file_name = f'{file_name}.dat'
+        
+    #Grab all the orders from the list
+    orders = order_list.get(0, END)
+
+    #Open file
+    output_file = open(file_name, 'wb')
+
+    #Actually add the stuff to the file
+    pickle.dump(orders, output_file)
+def open_list():
+    file_name = filedialog.askopenfilename(
+        title="Open File",
+        filetypes=(("Dat Files", "*.dat"), ("All Files", "*.*"))
+        )
+    
+    if file_name:
+        #Delete currently open file
+        order_list.delete(0, END)
+
+        #Open File
+        input_file = open(file_name, 'rb')
+
+        #Load date
+        orders = pickle.load(input_file)
+
+        #Output order to the screen
+        for order in orders:
+            order_list.insert(END, order)
+
 #-------------------------------|Variables|-----------------------------
 OrdersVar = StringVar()
 OrdersVar.set("Orders")
@@ -23,7 +71,7 @@ OrdersVar.set("Orders")
 ProductVar = StringVar()
 ProductVar.set("Product") #Will be used when making/adding orders
 
-filepath = 'ProductList.csv'
+filepath = 'ClientPricelist2022.csv'
 File = open(filepath)
 Reader = csv.reader(File)
 Data = list(Reader)
@@ -36,7 +84,13 @@ for order in list(range(0, len(Data))):
     Orders.append(Data[order][0])
 var = StringVar(value = Orders)
 
-#-------------------------------|Widgets|-------------------------------
+#---------------------------------|GUI|---------------------------------
+#Login Canvas
+login_canvas = Canvas(root)
+
+#Main Canvas
+main_canvas = Canvas(root)
+
 #Will change pack() to grid() in later version
 OrdersLabel = Label(root, textvariable=OrdersVar, justify='center')
 OrdersLabel.pack()
@@ -72,54 +126,6 @@ order_entry.pack(pady=20)
 #Create a button frame
 button_frame = Frame(root)
 button_frame.pack(pady=20)
-
-#Button Functions
-def add_order():
-    order_list.insert(END, order_entry.get())
-    order_entry.delete(0, END) #Gets rid of whatever is in the entry.
-def delete_order():
-    order_list.delete(ANCHOR)
-
-#Menu functions
-def save_list():
-    file_name = filedialog.asksaveasfilename(
-        title="Save File",
-        filetypes=(("Dat Files", "*.dat"), ("All Files", "*.*"))
-        )
-    if file_name:
-        if file_name.endswith(".dat"):
-            pass
-        else:
-            file_name = f'{file_name}.dat'
-        
-    #Grab all the orders from the list
-    orders = order_list.get(0, END)
-
-    #Open file
-    output_file = open(file_name, 'wb')
-
-    #Actually add the stuff to the file
-    pickle.dump(orders, output_file)
-
-def open_list():
-    file_name = filedialog.askopenfilename(
-        title="Open File",
-        filetypes=(("Dat Files", "*.dat"), ("All Files", "*.*"))
-        )
-    
-    if file_name:
-        #Delete currently open file
-        order_list.delete(0, END)
-
-        #Open File
-        input_file = open(file_name, 'rb')
-
-        #Load date
-        orders = pickle.load(input_file)
-
-        #Output order to the screen
-        for order in orders:
-            order_list.insert(END, order)
 
 #Add & delete buttons
 add_button = Button(button_frame, text="Add Order", command=add_order)
