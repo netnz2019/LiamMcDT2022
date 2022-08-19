@@ -18,11 +18,14 @@ root.geometry("500x500")#might change this later
 
 #------------------------------|Functions|------------------------------
 #Button Functions
+def add_product():
+    for product in Products:
+        product_list.insert(product)
 def add_order():
-    order_list.insert(END, order_entry.get())
+    product_list.insert(END, order_entry.get())
     order_entry.delete(0, END) #Gets rid of whatever is in the entry.
 def delete_order():
-    order_list.delete(ANCHOR)
+    product_list.delete(ANCHOR)
 
 #Menu functions
 def save_list():
@@ -37,7 +40,7 @@ def save_list():
             file_name = f'{file_name}.dat'
         
     #Grab all the orders from the list
-    orders = order_list.get(0, END)
+    orders = product_list.get(0, END)
 
     #Open file
     output_file = open(file_name, 'wb')
@@ -52,7 +55,7 @@ def open_list():
     
     if file_name:
         #Delete currently open file
-        order_list.delete(0, END)
+        product_list.delete(0, END)
 
         #Open File
         input_file = open(file_name, 'rb')
@@ -62,7 +65,7 @@ def open_list():
 
         #Output order to the screen
         for order in orders:
-            order_list.insert(END, order)
+            product_list.insert(END, order)
 
 #-------------------------------|Variables|-----------------------------
 OrdersVar = StringVar()
@@ -75,14 +78,21 @@ filepath = 'ClientPricelist2022.csv'
 File = open(filepath)
 Reader = csv.reader(File)
 Data = list(Reader)
-del(Data[0]) # gets rid of header row
 
-#Create Order list
-Orders = [] 
-#Add order list
-for order in list(range(0, len(Data))):
-    Orders.append(Data[order][0])
-var = StringVar(value = Orders)
+#Create Product list
+Products = [] 
+#Add product list
+for product in list(range(0, len(Data))):
+    Products.append(Data[product][0])
+var= StringVar(value = Products)
+
+#Create a Listbox frame
+list_frame = Frame(root)
+list_frame.pack(pady=10)
+
+#Create a button frame
+button_frame = Frame(root)
+button_frame.pack(pady=20)
 
 #---------------------------------|GUI|---------------------------------
 #Login Canvas
@@ -95,11 +105,8 @@ main_canvas = Canvas(root)
 OrdersLabel = Label(root, textvariable=OrdersVar, justify='center')
 OrdersLabel.pack()
 
-#Create Frame
-order_frame = Frame(root)
-order_frame.pack(pady=10)
-
-order_list = Listbox(order_frame, 
+product_list = Listbox(list_frame,
+    listvariable = var,
     width=100,
     height=15,
     bg="SystemButtonFace",
@@ -107,32 +114,28 @@ order_list = Listbox(order_frame,
     fg="#464646",
     highlightthickness=0,
     selectbackground="#a6a6a6",
-    activestyle="none" #line under selected order is gone
+    activestyle="none", #line under selected order is gone
     )
-
-order_list.pack(side=LEFT, fill=BOTH)
+product_list.pack(side=LEFT, fill=BOTH)
 
 #Add scrollbar
-order_scrollbar = Scrollbar(order_frame)
+order_scrollbar = Scrollbar(list_frame)
 order_scrollbar.pack(side=RIGHT, fill=BOTH)
 
-order_list.config(yscrollcommand=order_scrollbar.set)
-order_scrollbar.config(command=order_list.yview)
+product_list.config(yscrollcommand=order_scrollbar.set)
+order_scrollbar.config(command=product_list.yview)
 
 #create entry box to add orders to the list
 order_entry = Entry(root)
 order_entry.pack(pady=20)
 
-#Create a button frame
-button_frame = Frame(root)
-button_frame.pack(pady=20)
-
 #Add & delete buttons
-add_button = Button(button_frame, text="Add Order", command=add_order)
-delete_button = Button(button_frame, text="Delete Order", command=delete_order)
+add_button = Button(button_frame, text="Add Order", activebackground="green", activeforeground="white", command=add_order)
+delete_button = Button(button_frame, text="Delete Order", activebackground="green", activeforeground="white", command=delete_order)
 add_button.grid(row=0, column=0)
 delete_button.grid(row=0, column=1, padx=20)
 
+#---------------------------------|Menu|--------------------------------
 #Create Menu
 my_menu = Menu(root)
 root.config(menu=my_menu)
