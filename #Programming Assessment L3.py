@@ -28,11 +28,11 @@ class Table:
                 print(c)
 
                 if c == 1:
-                    self.e = Label(label_frame, textvariable=self.x, width=40, fg='blue', font=('Arial',16,'bold'), justify=LEFT)
+                    self.e = Label(label_frame, textvariable=self.x, width=40, fg='blue', font=('Arial',12,'bold'), justify="left")
                 elif c == 0:
-                    self.e = Label(label_frame, textvariable=self.x, width=10, fg='blue', font=('Arial',16,'bold'), justify=LEFT)
+                    self.e = Label(label_frame, textvariable=self.x, width=10, fg='blue', font=('Arial',12,'bold'), justify=LEFT)
                 else:
-                    self.e = Label(label_frame, textvariable=self.x, width=10, fg='blue', font=('Arial',16,'bold'), justify=RIGHT)
+                    self.e = Label(label_frame, textvariable=self.x, width=10, fg='blue', font=('Arial',12,'bold'), justify=RIGHT)
 
                 self.e.grid(row=r, column=c)
 
