@@ -19,24 +19,24 @@ class Table:
         label_frame = LabelFrame(root, text="Product List")
         label_frame.pack(expand = 'yes', fill = 'both', padx=15, pady=15)
 
-        # code for creating table
+        # Code for creating table
         for r in range(total_rows):
             print(r)
             for c in range(total_columns):
-                self.x = StringVar()
-                self.x.set(Data[r][c])
+                self.__x = StringVar()
+                self.__x.set(Data[r][c])
                 print(c)
 
                 if c == 1:
-                    self.e = Label(label_frame, textvariable=self.x, width=40, fg='blue', font=('Arial',12,'bold'), justify="left")
+                    self.l = Label(label_frame, textvariable=self.__x, width=40, fg='blue', font=('Arial',12,'bold'), justify='left')
                 elif c == 0:
-                    self.e = Label(label_frame, textvariable=self.x, width=10, fg='blue', font=('Arial',12,'bold'), justify=LEFT)
+                    self.l = Label(label_frame, textvariable=self.__x, width=10, fg='blue', font=('Arial',12,'bold'), justify="left")
                 else:
-                    self.e = Label(label_frame, textvariable=self.x, width=10, fg='blue', font=('Arial',12,'bold'), justify=RIGHT)
+                    self.l = Label(label_frame, textvariable=self.__x, width=10, fg='blue', font=('Arial',12,'bold'), justify=RIGHT)
 
-                self.e.grid(row=r, column=c)
+                self.l.grid(row=r, column=c)
 
-        #ADDING A SCROLLBAR
+        # ADDING A SCROLLBAR
         #myscrollbar = Scrollbar(label_frame)
         #myscrollbar.pack(side=RIGHT, fill=BOTH)
 
@@ -59,7 +59,10 @@ total_columns = len(Data[0])
 # Orders window
 root = Tk()
 root.title("Orders")
-root.geometry("500x500") # might change this later
+root.geometry("1750x750") # might change this later
+
+Orders = []
+
 t = Table(root)
 
 #------------------------------|Functions|------------------------------
@@ -82,12 +85,6 @@ OrdersVar.set("Orders")
 ProductVar = StringVar()
 ProductVar.set("Product") # Will be used when making/adding orders
 
-filepath = 'ClientPricelist2022.csv'
-File = open(filepath)
-Reader = csv.reader(File)
-Data = list(Reader)
-del(Data[0]) # gets rid of header row
-
 # Client List variables
 Invoice_num = [] 
 for product in list(range(0, len(Data))):
@@ -108,7 +105,6 @@ Retail_price = []
 for product in list(range(0, len(Data))):
     Retail_price.append(Data[product][3].strip('$'))
 rrp = DoubleVar(value = Retail_price)
-print(Retail_price[0] + Price[0])
 
 # Create a Listbox frame
 list_frame = Frame(root)
