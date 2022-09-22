@@ -27,11 +27,11 @@ class Table:
                 self.__x.set(Data[r][c])
                 print(c)
 
-                if c == 1:
+                if c == 1: # change width of product name labels
                     self.l = Label(label_frame, textvariable=self.__x, width=40, fg='blue', font=('Arial',12,'bold'), justify='left')
-                elif c == 0:
+                elif c == 0: # change width of product code labels
                     self.l = Label(label_frame, textvariable=self.__x, width=10, fg='blue', font=('Arial',12,'bold'), justify="left")
-                else:
+                else: # defualt Label settings
                     self.l = Label(label_frame, textvariable=self.__x, width=10, fg='blue', font=('Arial',12,'bold'), justify=RIGHT)
 
                 self.l.grid(row=r, column=c)
