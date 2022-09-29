@@ -17,20 +17,26 @@ class Table:
 
         # Groups widgets together
         label_frame = LabelFrame(root, text="Product List")
-        label_frame.pack(expand = 'yes', fill = 'both', padx=15, pady=15)
+        label_frame.pack(expand = 'yes', padx=15, pady=15)
 
         # Code for creating table
         for r in range(total_rows):
             print(r)
             for c in range(total_columns):
                 self.__x = StringVar()
-                self.__x.set(Data[r][c])
+                self.__x.set(lst[r][c])
                 print(c)
 
                 if c == 1: # change width of product name labels
                     self.l = Label(label_frame, textvariable=self.__x, width=40, fg='blue', font=('Arial',12,'bold'), justify='left')
                 elif c == 0: # change width of product code labels
                     self.l = Label(label_frame, textvariable=self.__x, width=10, fg='blue', font=('Arial',12,'bold'), justify="left")
+                elif r >= 1 and c == 7: # allows user to change status value
+                    __sttus = ["Paid", "Due", "Sent"]
+                    status = StringVar()
+                    status.set(__sttus[1])
+                    self.l = ttk.Combobox(label_frame, textvariable=status, state="readonly", width=10, font=('Arial',12,'bold'), justify=RIGHT)
+                    self.l['values'] = __sttus
                 else: # defualt Label settings
                     self.l = Label(label_frame, textvariable=self.__x, width=10, fg='blue', font=('Arial',12,'bold'), justify=RIGHT)
 
@@ -43,6 +49,8 @@ class Table:
         #label_frame.config(yscrollcomand=myscrollbar.set)
         #myscrollbar.config(command=label_frame.yview)
 
+lst = [("Inv. Num", "Client", "Address", "Total Cost", "Total RRP", "DoI", "Date Due", "Status"), ("1", "Someone", "113 Johns Rd, Bryndwr", "$420.69", "$841.38", "29/09/22", "10/10/22", "Paid")] # List of Orders
+
 filepath = 'ClientPricelist2022_test.csv'
 File = open(filepath)
 Reader = csv.reader(File)
@@ -52,8 +60,8 @@ print(Data)
 
 # find total number of rows and
 # columns in list
-total_rows = len(Data)
-total_columns = len(Data[0])
+total_rows = len(lst)
+total_columns = len(lst[0])
 
 #-------------------------------|Windows|-------------------------------
 # Orders window
