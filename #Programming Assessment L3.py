@@ -15,9 +15,12 @@ class Table:
      
     def __init__(self, root):
 
+        outer_frame = LabelFrame(root)
+        outer_frame.pack()
+
         # Groups widgets together
-        label_frame = LabelFrame(root, text="Product List")
-        label_frame.pack(expand = 'yes', padx=15, pady=15)
+        table_frame = LabelFrame(outer_frame, text="Product List")
+        table_frame.pack(expand = 'yes', padx=15, pady=15)
 
         # Code for creating table
         for r in range(total_rows):
@@ -28,26 +31,26 @@ class Table:
                 print(c)
 
                 if c == 1: # change width of product name labels
-                    self.l = Label(label_frame, textvariable=self.__x, width=40, fg='blue', font=('Arial',12,'bold'), justify='left')
+                    self.l = Label(table_frame, textvariable=self.__x, width=40, fg='blue', font=('Arial',12,'bold'), justify='left')
                 elif c == 0: # change width of product code labels
-                    self.l = Label(label_frame, textvariable=self.__x, width=10, fg='blue', font=('Arial',12,'bold'), justify="left")
+                    self.l = Label(table_frame, textvariable=self.__x, width=10, fg='blue', font=('Arial',12,'bold'), justify="left")
                 elif r >= 1 and c == 7: # allows user to change status value
                     __sttus = ["Paid", "Due", "Sent"]
                     status = StringVar()
                     status.set(__sttus[1])
-                    self.l = ttk.Combobox(label_frame, textvariable=status, state="readonly", width=10, font=('Arial',12,'bold'), justify=RIGHT)
+                    self.l = ttk.Combobox(table_frame, textvariable=status, state="readonly", width=10, font=('Arial',12,'bold'), justify=RIGHT)
                     self.l['values'] = __sttus
                 else: # defualt Label settings
-                    self.l = Label(label_frame, textvariable=self.__x, width=10, fg='blue', font=('Arial',12,'bold'), justify=RIGHT)
+                    self.l = Label(table_frame, textvariable=self.__x, width=10, fg='blue', font=('Arial',12,'bold'), justify=RIGHT)
 
                 self.l.grid(row=r, column=c)
 
         # ADDING A SCROLLBAR
-        #myscrollbar = Scrollbar(label_frame)
+        #myscrollbar = Scrollbar(table_frame)
         #myscrollbar.pack(side=RIGHT, fill=BOTH)
 
-        #label_frame.config(yscrollcomand=myscrollbar.set)
-        #myscrollbar.config(command=label_frame.yview)
+        #table_frame.config(yscrollcomand=myscrollbar.set)
+        #myscrollbar.config(command=table_frame.yview)
 
 lst = [("Inv. Num", "Client", "Address", "Total Cost", "Total RRP", "DoI", "Date Due", "Status"), ("1", "Someone", "113 Johns Rd, Bryndwr", "$420.69", "$841.38", "29/09/22", "10/10/22", "Paid")] # List of Orders
 
