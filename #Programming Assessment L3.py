@@ -15,11 +15,11 @@ class Table:
      
     def __init__(self, root):
 
+        myscrollbar = ttk.Scrollbar(root, orient="vertical")
+        myscrollbar.pack(side=RIGHT, fill=BOTH)
+
         outer_frame = Frame(root)
         outer_frame.pack(expand='yes')
-
-        myscrollbar = ttk.Scrollbar(outer_frame, orient="vertical")
-        myscrollbar.pack(side=RIGHT, fill=BOTH)
 
         #outer_frame.config(yscrollcomand=myscrollbar.set)
         #myscrollbar.config(command=outer_frame.yview)
@@ -61,42 +61,51 @@ class Table:
         #outer_frame.pack()
 
 
-        # Add order
+        # Add order widgets
         add_order = LabelFrame(root, text="Add Order")
         add_order.pack(expand = 'yes', padx=15, pady=15)
 
+        instructions = Label(add_order, text="Please add oder details below")
+        instructions.grid(row=0, column=0, columnspan=2)
+        
         InvNum = StringVar()
         InvNum.set("Inv. Num")
         entry1 = Entry(add_order, textvariable=InvNum, width=10)
-        entry1.grid(row=0, column=0)
+        entry1.grid(row=1, column=0)
 
         Client = StringVar()
+        Client.set("Client")
         client_entry = Entry(add_order, textvariable=Client, width=40)
-        client_entry.grid(row=0, column=1)
+        client_entry.grid(row=1, column=1)
 
         Address = StringVar()
-        address_entry = Entry(add_order, textvariable=Address, width=10)
-        address_entry.grid(row=0, column=2)
+        Address.set("Address")
+        address_entry = Entry(add_order, textvariable=Address, width=40)
+        address_entry.grid(row=1, column=2)
 
         TotalCost = StringVar()
+        TotalCost.set("Total Cost")
         totalcost_entry = Entry(add_order, textvariable=TotalCost, width=10)
-        totalcost_entry.grid(row=0, column=3)
+        totalcost_entry.grid(row=1, column=3)
 
         TotalRRP = StringVar()
+        TotalRRP.set("Total RRP")
         totalrrp_entry = Entry(add_order, textvariable=TotalRRP, width=10)
-        totalrrp_entry.grid(row=0, column=4)
+        totalrrp_entry.grid(row=1, column=4)
 
         DoI = StringVar()
+        DoI.set("DoI")
         doi_entry = Entry(add_order, textvariable=DoI, width=10)
-        doi_entry.grid(row=0, column=5)
+        doi_entry.grid(row=1, column=5)
 
         DateDue = StringVar()
+        DateDue.set("Date Due")
         datedue_entry = Entry(add_order, textvariable=DateDue)
-        datedue_entry.grid(row=0, column=6)
+        datedue_entry.grid(row=1, column=6)
 
         status_combo = ttk.Combobox(add_order, textvariable=status, state="readonly")
         status_combo['values'] = __sttus
-        status_combo.grid(row=0, column=7)
+        status_combo.grid(row=1, column=7)
 
 
 
