@@ -15,8 +15,14 @@ class Table:
      
     def __init__(self, root):
 
-        outer_frame = LabelFrame(root)
-        outer_frame.pack()
+        outer_frame = Frame(root)
+        outer_frame.pack(expand='yes')
+
+        myscrollbar = ttk.Scrollbar(outer_frame, orient="vertical")
+        myscrollbar.pack(side=RIGHT, fill=BOTH)
+
+        #outer_frame.config(yscrollcomand=myscrollbar.set)
+        #myscrollbar.config(command=outer_frame.yview)
 
         # Groups widgets together
         table_frame = LabelFrame(outer_frame, text="Product List")
@@ -34,7 +40,7 @@ class Table:
                     self.l = Label(table_frame, textvariable=self.__x, width=40, fg='blue', font=('Arial',12,'bold'), justify='left')
                 elif c == 0: # change width of product code labels
                     self.l = Label(table_frame, textvariable=self.__x, width=10, fg='blue', font=('Arial',12,'bold'), justify="left")
-                elif r >= 1 and c == 7: # allows user to change status value
+                elif r >= 1 and c == 4: # allows user to change status value
                     __sttus = ["Paid", "Due", "Sent"]
                     status = StringVar()
                     status.set(__sttus[1])
@@ -49,8 +55,50 @@ class Table:
         #myscrollbar = Scrollbar(table_frame)
         #myscrollbar.pack(side=RIGHT, fill=BOTH)
 
-        #table_frame.config(yscrollcomand=myscrollbar.set)
-        #myscrollbar.config(command=table_frame.yview)
+        #outer_frame.config(yscrollcomand=myscrollbar.set)
+        #myscrollbar.config(command=outer_frame.yview)
+
+        #outer_frame.pack()
+
+
+        # Add order
+        add_order = LabelFrame(root, text="Add Order")
+        add_order.pack(expand = 'yes', padx=15, pady=15)
+
+        InvNum = StringVar()
+        InvNum.set("Inv. Num")
+        entry1 = Entry(add_order, textvariable=InvNum, width=10)
+        entry1.grid(row=0, column=0)
+
+        Client = StringVar()
+        client_entry = Entry(add_order, textvariable=Client, width=40)
+        client_entry.grid(row=0, column=1)
+
+        Address = StringVar()
+        address_entry = Entry(add_order, textvariable=Address, width=10)
+        address_entry.grid(row=0, column=2)
+
+        TotalCost = StringVar()
+        totalcost_entry = Entry(add_order, textvariable=TotalCost, width=10)
+        totalcost_entry.grid(row=0, column=3)
+
+        TotalRRP = StringVar()
+        totalrrp_entry = Entry(add_order, textvariable=TotalRRP, width=10)
+        totalrrp_entry.grid(row=0, column=4)
+
+        DoI = StringVar()
+        doi_entry = Entry(add_order, textvariable=DoI, width=10)
+        doi_entry.grid(row=0, column=5)
+
+        DateDue = StringVar()
+        datedue_entry = Entry(add_order, textvariable=DateDue)
+        datedue_entry.grid(row=0, column=6)
+
+        status_combo = ttk.Combobox(add_order, textvariable=status, state="readonly")
+        status_combo['values'] = __sttus
+        status_combo.grid(row=0, column=7)
+
+
 
 lst = [("Inv. Num", "Client", "Address", "Total Cost", "Total RRP", "DoI", "Date Due", "Status"), ("1", "Someone", "113 Johns Rd, Bryndwr", "$420.69", "$841.38", "29/09/22", "10/10/22", "Paid")] # List of Orders
 
