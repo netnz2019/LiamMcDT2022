@@ -29,27 +29,30 @@ class Table:
         table_frame.pack(expand = 'yes', padx=15, pady=15)
 
         # Code for creating table
-        for r in range(total_rows):
-            print(r)
-            for c in range(total_columns):
-                self.__x = StringVar()
-                self.__x.set(lst[r][c])
-                print(c)
+        def table():
+            for r in range(total_rows):
+                print(r)
+                for c in range(total_columns):
+                    self.__x = StringVar()
+                    self.__x.set(lst[r][c])
+                    print(c)
 
-                if c == 1: # change width of product name labels
-                    self.l = Label(table_frame, textvariable=self.__x, width=40, fg='blue', font=('Arial',12,'bold'), justify='left')
-                elif c == 0: # change width of product code labels
-                    self.l = Label(table_frame, textvariable=self.__x, width=10, fg='blue', font=('Arial',12,'bold'), justify="left")
-                elif r >= 1 and c == 4: # allows user to change status value
-                    __sttus = ["Paid", "Due", "Sent"]
-                    status = StringVar()
-                    status.set(__sttus[1])
-                    self.l = ttk.Combobox(table_frame, textvariable=status, state="readonly", width=10, font=('Arial',12,'bold'), justify=RIGHT)
-                    self.l['values'] = __sttus
-                else: # defualt Label settings
-                    self.l = Label(table_frame, textvariable=self.__x, width=10, fg='blue', font=('Arial',12,'bold'), justify=RIGHT)
+                    if c == 1: # change width of product name labels
+                        self.l = Label(table_frame, textvariable=self.__x, width=40, fg='blue', font=('Arial',12,'bold'), justify='left')
+                    elif c == 0: # change width of product code labels
+                        self.l = Label(table_frame, textvariable=self.__x, width=10, fg='blue', font=('Arial',12,'bold'), justify="left")
+                    elif r >= 1 and c == 4: # allows user to change status value
+                        __sttus = ["Paid", "Due", "Sent"]
+                        status = StringVar()
+                        status.set(__sttus[1])
+                        self.l = ttk.Combobox(table_frame, textvariable=status, state="readonly", width=10, font=('Arial',12,'bold'), justify=RIGHT)
+                        self.l['values'] = __sttus
+                    else: # defualt Label settings
+                        self.l = Label(table_frame, textvariable=self.__x, width=10, fg='blue', font=('Arial',12,'bold'), justify=RIGHT)
 
-                self.l.grid(row=r, column=c)
+                    self.l.grid(row=r, column=c)
+        
+        table()
 
         # ADDING A SCROLLBAR
         #myscrollbar = Scrollbar(table_frame)
@@ -60,18 +63,33 @@ class Table:
 
         #outer_frame.pack()
 
+        # Button Functions
+        def add_order():
+            order = []
+            order.append(invnum.get())
+            order.append(client_entry.get())
+            order.append(address_entry.get())
+            order.append(totalcost_entry.get())
+            order.append(totalrrp_entry.get())
+            order.append(doi_entry.get())
+            order.append(datedue_entry.get())
+            order.append(status_combo.get())
+            order = tuple
+            lst.append(order)
+            table()
+        def delete_order():
+            pass
 
         # Add order widgets
         add_order = LabelFrame(root, text="Add Order")
-        add_order.pack(expand = 'yes', padx=15, pady=15)
 
         instructions = Label(add_order, text="Please add oder details below")
         instructions.grid(row=0, column=0, columnspan=2)
         
         InvNum = StringVar()
         InvNum.set("Inv. Num")
-        entry1 = Entry(add_order, textvariable=InvNum, width=10)
-        entry1.grid(row=1, column=0)
+        invnum = Entry(add_order, textvariable=InvNum, width=10)
+        invnum.grid(row=1, column=0)
 
         Client = StringVar()
         Client.set("Client")
@@ -103,9 +121,20 @@ class Table:
         datedue_entry = Entry(add_order, textvariable=DateDue)
         datedue_entry.grid(row=1, column=6)
 
+        __sttus = ["Paid", "Due", "Sent"]
+        status = StringVar()
+        status.set(__sttus[1])
         status_combo = ttk.Combobox(add_order, textvariable=status, state="readonly")
         status_combo['values'] = __sttus
         status_combo.grid(row=1, column=7)
+
+        # Add & delete buttons
+        add_button = Button(add_order, text="Add Order", activebackground="green", activeforeground="white", command=add_order)
+        delete_button = Button(add_order, text="Delete Order", activebackground="red", activeforeground="white", command=delete_order)
+        add_button.grid(row=2, column=0)
+        delete_button.grid(row=2, column=1, padx=20)
+
+        add_order.pack(expand = 'yes', padx=15, pady=15)
 
 
 
@@ -134,11 +163,6 @@ Orders = []
 t = Table(root)
 
 #------------------------------|Functions|------------------------------
-# Button Functions
-def add_order():
-    pass
-def delete_order():
-    pass
 
 # Menu functions
 def save_list():
@@ -174,34 +198,12 @@ for product in list(range(0, len(Data))):
     Retail_price.append(Data[product][3].strip('$'))
 rrp = DoubleVar(value = Retail_price)
 
-# Create a Listbox frame
-list_frame = Frame(root)
-list_frame.pack(pady=10)
-
-# Create a button frame
-button_frame = Frame(root)
-button_frame.pack(pady=20)
-
 #---------------------------------|GUI|---------------------------------
 # Login Canvas
 login_canvas = Canvas(root)
 
 # Main Canvas
 main_canvas = Canvas(root)
-
-# Will change pack() to grid() in later version
-OrdersLabel = Label(root, textvariable=OrdersVar)
-OrdersLabel.pack()
-
-# create entry box to add orders to the list
-order_entry = Entry(root)
-order_entry.pack(pady=20)
-
-# Add & delete buttons
-add_button = Button(button_frame, text="Add Order", activebackground="green", activeforeground="white", command=add_order)
-delete_button = Button(button_frame, text="Delete Order", activebackground="green", activeforeground="white", command=delete_order)
-add_button.grid(row=1, column=0)
-delete_button.grid(row=1, column=1, padx=20)
 
 #---------------------------------|Menu|--------------------------------
 # Create Menu
