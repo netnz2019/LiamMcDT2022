@@ -1,6 +1,8 @@
 # Programming Assessment L3
 # Liam McNeill
 # SkinTech Finance GUI App
+# Big chunk of stuff explaining how program works
+# Error checking - add to write up and code
 
 #-------------------------------|Imports|-------------------------------
 from tkinter import *
@@ -14,6 +16,10 @@ import pickle
 class Table:
      
     def __init__(self, root):
+
+        # List for orders
+        lst = [("Inv. Num", "Client", "Address", "Total Cost", "Total RRP", "DoI", "Date Due", "Status"), 
+                ("1", "Someone", "113 Johns Rd, Bryndwr", "$420.69", "$841.38", "29/09/22", "10/10/22", "Paid")] # List of Orders
 
         myscrollbar = ttk.Scrollbar(root, orient="vertical")
         myscrollbar.pack(side=RIGHT, fill=BOTH)
@@ -30,18 +36,21 @@ class Table:
 
         # Code for creating table
         def table():
+            # find total number of rows and columns in list
+            total_rows = len(lst)
+            total_columns = len(lst[0])
             for r in range(total_rows):
-                print(r)
+                #print(r)
                 for c in range(total_columns):
                     self.__x = StringVar()
                     self.__x.set(lst[r][c])
-                    print(c)
+                    #print(c)
 
                     if c == 1: # change width of product name labels
                         self.l = Label(table_frame, textvariable=self.__x, width=40, fg='blue', font=('Arial',12,'bold'), justify='left')
                     elif c == 0: # change width of product code labels
                         self.l = Label(table_frame, textvariable=self.__x, width=10, fg='blue', font=('Arial',12,'bold'), justify="left")
-                    elif r >= 1 and c == 4: # allows user to change status value
+                    elif r >= 1 and c == 7: # allows user to change status value
                         __sttus = ["Paid", "Due", "Sent"]
                         status = StringVar()
                         status.set(__sttus[1])
@@ -52,7 +61,8 @@ class Table:
 
                     self.l.grid(row=r, column=c)
         
-        table()
+        table() # Calls the table when staring up GUI
+                    
 
         # ADDING A SCROLLBAR
         #myscrollbar = Scrollbar(table_frame)
@@ -63,20 +73,21 @@ class Table:
 
         #outer_frame.pack()
 
+        
         # Button Functions
-        def add_order():
-            order = []
-            order.append(invnum.get())
-            order.append(client_entry.get())
-            order.append(address_entry.get())
-            order.append(totalcost_entry.get())
-            order.append(totalrrp_entry.get())
-            order.append(doi_entry.get())
-            order.append(datedue_entry.get())
-            order.append(status_combo.get())
-            order = tuple
+        def add(): # Makes order a tuple to then add to overall list
+            order = (invnum.get(), 
+                    client_entry.get(), 
+                    address_entry.get(), 
+                    totalcost_entry.get(), 
+                    totalrrp_entry.get(), 
+                    doi_entry.get(), 
+                    datedue_entry.get(), 
+                    status_combo.get())
+            print(order)
             lst.append(order)
-            table()
+            print(lst)
+            table() # Recalls table so that it is updated
         def delete_order():
             pass
 
@@ -129,7 +140,7 @@ class Table:
         status_combo.grid(row=1, column=7)
 
         # Add & delete buttons
-        add_button = Button(add_order, text="Add Order", activebackground="green", activeforeground="white", command=add_order)
+        add_button = Button(add_order, text="Add Order", activebackground="green", activeforeground="white", command=add)
         delete_button = Button(add_order, text="Delete Order", activebackground="red", activeforeground="white", command=delete_order)
         add_button.grid(row=2, column=0)
         delete_button.grid(row=2, column=1, padx=20)
@@ -137,20 +148,12 @@ class Table:
         add_order.pack(expand = 'yes', padx=15, pady=15)
 
 
-
-lst = [("Inv. Num", "Client", "Address", "Total Cost", "Total RRP", "DoI", "Date Due", "Status"), ("1", "Someone", "113 Johns Rd, Bryndwr", "$420.69", "$841.38", "29/09/22", "10/10/22", "Paid")] # List of Orders
-
 filepath = 'ClientPricelist2022_test.csv'
 File = open(filepath)
 Reader = csv.reader(File)
 Data = list(map(tuple, Reader)) # Converts into tuple
 
-print(Data)
-
-# find total number of rows and
-# columns in list
-total_rows = len(lst)
-total_columns = len(lst[0])
+#print(Data)
 
 #-------------------------------|Windows|-------------------------------
 # Orders window
