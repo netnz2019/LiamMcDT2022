@@ -37,14 +37,12 @@ class Table:
         # Code for creating table
         def table():
             # find total number of rows and columns in list
-            total_rows = len(lst)
-            total_columns = len(lst[0])
-            for r in range(total_rows):
-                #print(r)
+            total_rows = len(lst) # decides the amount of rows via number of tuples (orders) in lst
+            total_columns = len(lst[0]) # decides the amount of columns via number of values in the first tuple of lst
+            for r in range(total_rows): 
                 for c in range(total_columns):
                     self.__x = StringVar()
                     self.__x.set(lst[r][c])
-                    #print(c)
 
                     if c == 1: # change width of product name labels
                         self.l = Label(table_frame, textvariable=self.__x, width=40, fg='blue', font=('Arial',12,'bold'), justify='left')
@@ -73,10 +71,26 @@ class Table:
 
         #outer_frame.pack()
 
-        
         # Button Functions
         def add(): # Makes order a tuple to then add to overall list
-            order = (invnum.get(), 
+            Num = IntVar()
+            Num = 0
+            order = (client_entry.get(), 
+                    address_entry.get(), 
+                    totalcost_entry.get(), 
+                    totalrrp_entry.get(), 
+                    doi_entry.get(), 
+                    datedue_entry.get(), 
+                    status_combo.get())
+            for i in order:
+                if len(i) > 0:
+                    Num = Num + 1
+                    print(Num)
+                    pass
+                else:
+                    print("entry is empty")
+            if Num == 7:
+                order = (0, 
                     client_entry.get(), 
                     address_entry.get(), 
                     totalcost_entry.get(), 
@@ -84,10 +98,10 @@ class Table:
                     doi_entry.get(), 
                     datedue_entry.get(), 
                     status_combo.get())
-            print(order)
-            lst.append(order)
-            print(lst)
-            table() # Recalls table so that it is updated
+                lst.append(order)
+                table() # Recalls table so that it is updated
+            else:
+                pass
         def delete_order():
             pass
 
@@ -96,11 +110,6 @@ class Table:
 
         instructions = Label(add_order, text="Please add oder details below")
         instructions.grid(row=0, column=0, columnspan=2)
-        
-        InvNum = StringVar()
-        InvNum.set("Inv. Num")
-        invnum = Entry(add_order, textvariable=InvNum, width=10)
-        invnum.grid(row=1, column=0)
 
         Client = StringVar()
         Client.set("Client")
