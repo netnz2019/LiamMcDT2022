@@ -11,6 +11,7 @@ from tkinter import dialog
 from tkinter import filedialog
 import csv # better than excel
 import pickle
+import time
 
 #--------------------------------|Class|--------------------------------
 class Table:
@@ -84,9 +85,7 @@ class Table:
                     print(Num)
                     pass
                 else:
-                    self.f = Label(add_order, text="entry is empty", width=10)
-                    self.f.grid(row=3, column=i)
-                    print("entry is empty")
+                    pass
             InvNum = len(lst)
             if Num == 7:
                 order = (InvNum, 
@@ -98,16 +97,33 @@ class Table:
                     datedue_entry.get(), 
                     status_entry.get())
                 lst.append(order)
-                table() # Recalls table so that it is updated
-                return 
+                table() # Recalls table so that it is updated 
             else:
-                pass
-            return 
+                __f = Label(add_order, text="ENTRY IS EMPTY", fg="red", font=('Arial',10,'bold'))
+                __f.grid(row=2, column=7) 
+
         def delete_order():
-            pass
+            if d.get().isnumeric() == TRUE:
+                lst.pop(int(d.get()))
+                for x in 8:
+                    self.l = Label(table_frame, text="")
+                    self.l.grid(row=len(lst), column=x)
+                table()
+            else:
+                __f = Label(add_order, text="ENTRY ISN'T A NUMBER", fg="red", font=('Arial',10,'bold'))
+                __f.grid(row=2, column=2)
+
+        # Menu functions
+        def save_list():
+            #define a patch for the pickle file on your disk
+            pick_path = 'lst.pkl'
+
+            #convert the dictionary to pickle
+            with open (pick_path, 'wb') as pick:
+                pickle.dump(lst, pick)
 
         # Add order widgets
-        add_order = LabelFrame(root, text="Add Order")
+        add_order = LabelFrame(root, text="Add/Delete Order")
 
         instructions = Label(add_order, text="Please add oder details below")
         instructions.grid(row=0, column=0, columnspan=2)
@@ -147,13 +163,28 @@ class Table:
         status_entry = Entry(add_order, textvariable=status)
         status_entry.grid(row=1, column=7)
 
+        Inv = StringVar()
+        Inv.set("Enter in Inv.Num of order you want to delete")
+        d = Entry(add_order, textvariable=Inv, width=40)
+        d.grid(row=2, column=1)
+
         # Add & delete buttons
         add_button = Button(add_order, text="Add Order", activebackground="green", activeforeground="white", command=add)
         delete_button = Button(add_order, text="Delete Order", activebackground="red", activeforeground="white", command=delete_order)
-        add_button.grid(row=2, column=0)
-        delete_button.grid(row=2, column=1, padx=20)
+        add_button.grid(row=1, column=0)
+        delete_button.grid(row=2, column=0)
 
         add_order.pack(expand = 'yes', padx=15, pady=15)
+
+        # Create Menu
+        my_menu = Menu(root)
+        root.config(menu=my_menu)
+
+        # Add items to the menu
+        file_menu = Menu(my_menu, tearoff=False)
+        my_menu.add_cascade(label="File", menu=file_menu)
+        file_menu.add_command(label="Save", command=save_list) # Dropdown option
+        #file_menu.add_command(label="open", command=open_list)
 
 
 filepath = 'ClientPricelist2022_test.csv'
@@ -173,41 +204,6 @@ Orders = []
 
 t = Table(root)
 
-#------------------------------|Functions|------------------------------
-
-# Menu functions
-def save_list():
-    pass
-def open_list():
-    pass
-
-#-------------------------------|Variables|-----------------------------
-OrdersVar = StringVar()
-OrdersVar.set("Orders")
-
-ProductVar = StringVar()
-ProductVar.set("Product") # Will be used when making/adding orders
-
-# Client List variables
-Invoice_num = [] 
-for product in list(range(0, len(Data))):
-    Invoice_num.append(Data[product][0])
-Invoice = StringVar(value = Invoice_num)
-
-Prod_Name = []
-for product in list(range(0, len(Data))):
-    Prod_Name.append(Data[product][1])
-Name = StringVar(value = Prod_Name)
-
-Price = []
-for product in list(range(0, len(Data))):
-    Price.append(Data[product][2].strip('$'))
-Cost = DoubleVar(value = Price)
-
-Retail_price = []
-for product in list(range(0, len(Data))):
-    Retail_price.append(Data[product][3].strip('$'))
-rrp = DoubleVar(value = Retail_price)
 
 #---------------------------------|GUI|---------------------------------
 # Login Canvas
@@ -215,17 +211,6 @@ login_canvas = Canvas(root)
 
 # Main Canvas
 main_canvas = Canvas(root)
-
-#---------------------------------|Menu|--------------------------------
-# Create Menu
-my_menu = Menu(root)
-root.config(menu=my_menu)
-
-# Add items to the menu
-file_menu = Menu(my_menu, tearoff=False)
-my_menu.add_cascade(label="File", menu=file_menu)
-file_menu.add_command(label="Save", command=save_list) # Dropdown option
-file_menu.add_command(label="open", command=open_list)
 
 #-------------------------------|Mainloop|------------------------------
 root.mainloop()
