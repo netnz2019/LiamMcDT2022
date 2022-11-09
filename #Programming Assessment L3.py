@@ -68,7 +68,7 @@ class Table:
 
         #outer_frame.pack()
 
-
+        #-------------------------------|Functions|-------------------------------
         # Button Functions
         def add(): # Makes order a tuple to then add to overall list
             Num = 0
@@ -121,7 +121,11 @@ class Table:
             #convert the dictionary to pickle
             with open (pick_path, 'wb') as pick:
                 pickle.dump(lst, pick)
+        
+        def open_list():
+            pass
 
+        #-------------------------------|Widgets|-------------------------------
         # Add order widgets
         add_order = LabelFrame(root, text="Add/Delete Order")
 
@@ -200,10 +204,7 @@ root = Tk()
 root.title("Orders")
 root.geometry("1750x750") # might change this later
 
-Orders = []
-
 t = Table(root)
-
 
 #---------------------------------|GUI|---------------------------------
 # Login Canvas
