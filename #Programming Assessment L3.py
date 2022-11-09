@@ -49,11 +49,7 @@ class Table:
                     elif c == 0: # change width of product code labels
                         self.l = Label(table_frame, textvariable=self.__x, width=10, fg='blue', font=('Arial',12,'bold'), justify="left")
                     elif r >= 1 and c == 7: # allows user to change status value
-                        __sttus = ["Paid", "Due", "Sent"]
-                        status = StringVar()
-                        status.set(__sttus[1])
-                        self.l = ttk.Combobox(table_frame, textvariable=status, state="readonly", width=10, font=('Arial',12,'bold'), justify=RIGHT)
-                        self.l['values'] = __sttus
+                        self.l = Entry(table_frame, textvariable=self.__x, width=10, font=('Arial',12,'bold'), justify=RIGHT)
                     else: # defualt Label settings
                         self.l = Label(table_frame, textvariable=self.__x, width=10, fg='blue', font=('Arial',12,'bold'), justify=RIGHT)
 
@@ -71,9 +67,9 @@ class Table:
 
         #outer_frame.pack()
 
+
         # Button Functions
         def add(): # Makes order a tuple to then add to overall list
-            Num = IntVar()
             Num = 0
             order = (client_entry.get(), 
                     address_entry.get(), 
@@ -81,27 +77,32 @@ class Table:
                     totalrrp_entry.get(), 
                     doi_entry.get(), 
                     datedue_entry.get(), 
-                    status_combo.get())
+                    status_entry.get())
             for i in order:
                 if len(i) > 0:
                     Num = Num + 1
                     print(Num)
                     pass
                 else:
+                    self.f = Label(add_order, text="entry is empty", width=10)
+                    self.f.grid(row=3, column=i)
                     print("entry is empty")
+            InvNum = len(lst)
             if Num == 7:
-                order = (0, 
+                order = (InvNum, 
                     client_entry.get(), 
                     address_entry.get(), 
                     totalcost_entry.get(), 
                     totalrrp_entry.get(), 
                     doi_entry.get(), 
                     datedue_entry.get(), 
-                    status_combo.get())
+                    status_entry.get())
                 lst.append(order)
                 table() # Recalls table so that it is updated
+                return 
             else:
                 pass
+            return 
         def delete_order():
             pass
 
@@ -141,12 +142,10 @@ class Table:
         datedue_entry = Entry(add_order, textvariable=DateDue)
         datedue_entry.grid(row=1, column=6)
 
-        __sttus = ["Paid", "Due", "Sent"]
         status = StringVar()
-        status.set(__sttus[1])
-        status_combo = ttk.Combobox(add_order, textvariable=status, state="readonly")
-        status_combo['values'] = __sttus
-        status_combo.grid(row=1, column=7)
+        status.set("Status")
+        status_entry = Entry(add_order, textvariable=status)
+        status_entry.grid(row=1, column=7)
 
         # Add & delete buttons
         add_button = Button(add_order, text="Add Order", activebackground="green", activeforeground="white", command=add)
