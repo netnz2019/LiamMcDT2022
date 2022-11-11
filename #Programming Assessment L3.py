@@ -19,14 +19,16 @@ class Table:
     def __init__(self, root):
 
         # List for orders
-        lst = [("Inv. Num", "Client", "Address", "Total Cost", "Total RRP", "DoI", "Date Due", "Status"), 
-                ("1", "Someone", "113 Johns Rd, Bryndwr", "$420.69", "$841.38", "29/09/22", "10/10/22", "Paid")] # List of Orders
+        lst = [("Inv. Num", "Client", "Address", "Total Cost", "Total RRP", "DoI", "Date Due", "Status")] # List of Orders
 
         myscrollbar = ttk.Scrollbar(root, orient="vertical")
         myscrollbar.pack(side=RIGHT, fill=BOTH)
 
+        add_order = LabelFrame(root, text="Add/Delete Order")
+        add_order.pack(pady=20)
+
         outer_frame = Frame(root)
-        outer_frame.pack(expand='yes')
+        outer_frame.pack(pady=15)
 
         #outer_frame.config(yscrollcomand=myscrollbar.set)
         #myscrollbar.config(command=outer_frame.yview)
@@ -46,7 +48,9 @@ class Table:
                     self.__x.set(lst[r][c])
 
                     if c == 1: # change width of product name labels
-                        self.l = Label(table_frame, textvariable=self.__x, width=40, fg='blue', font=('Arial',12,'bold'), justify='left')
+                        self.l = Label(table_frame, textvariable=self.__x, width=20, fg='blue', font=('Arial',12,'bold'), justify='left')
+                    elif c == 2:
+                        self.l = Label(table_frame, textvariable=self.__x, width=30, fg='blue', font=('Arial',12,'bold'), justify='left')
                     elif c == 0: # change width of product code labels
                         self.l = Label(table_frame, textvariable=self.__x, width=10, fg='blue', font=('Arial',12,'bold'), justify="left")
                     elif r >= 1 and c == 7: # allows user to change status value
@@ -72,6 +76,7 @@ class Table:
         # Button Functions
         def add(): # Makes order a tuple to then add to overall list
             Num = 0
+
             order = (client_entry.get(), 
                     address_entry.get(), 
                     totalcost_entry.get(), 
@@ -79,14 +84,16 @@ class Table:
                     doi_entry.get(), 
                     datedue_entry.get(), 
                     status_entry.get())
+
             for i in order:
                 if len(i) > 0:
                     Num = Num + 1
-                    print(Num)
                     pass
                 else:
                     pass
+
             InvNum = len(lst)
+
             if Num == 7:
                 order = (InvNum, 
                     client_entry.get(), 
@@ -102,16 +109,27 @@ class Table:
                 __f = Label(add_order, text="ENTRY IS EMPTY", fg="red", font=('Arial',10,'bold'))
                 __f.grid(row=2, column=7) 
 
-        def delete_order():
+
+        def delete_order(): # function to delete unwanted orders
             if d.get().isnumeric() == TRUE:
+                for x in range(8):
+                    if x == 1: # gets rid of bottom order widgets and specifies width
+                        l = Label(table_frame, text="", width=20, fg='blue', font=('Arial',12,'bold'), justify='left')
+                    elif x == 2:
+                        l = Label(table_frame, text="", width=30, fg='blue', font=('Arial',12,'bold'), justify='left')
+                    elif x == 0: 
+                        l = Label(table_frame, text="", width=10, fg='blue', font=('Arial',12,'bold'), justify="left")
+                    else: 
+                        l = Label(table_frame, text="", width=10, fg='blue', font=('Arial',12,'bold'), justify=RIGHT)
+                    l.grid(row=len(lst)-1, column=x)
+
                 lst.pop(int(d.get()))
-                for x in 8:
-                    self.l = Label(table_frame, text="")
-                    self.l.grid(row=len(lst), column=x)
-                table()
+                table() # updates table without selected order
             else:
                 __f = Label(add_order, text="ENTRY ISN'T A NUMBER", fg="red", font=('Arial',10,'bold'))
                 __f.grid(row=2, column=2)
+
+
 
         # Menu functions
         def save_list():
@@ -122,13 +140,12 @@ class Table:
             with open (pick_path, 'wb') as pick:
                 pickle.dump(lst, pick)
         
+
         def open_list():
             pass
 
         #-------------------------------|Widgets|-------------------------------
         # Add order widgets
-        add_order = LabelFrame(root, text="Add/Delete Order")
-
         instructions = Label(add_order, text="Please add oder details below")
         instructions.grid(row=0, column=0, columnspan=2)
 
@@ -178,8 +195,6 @@ class Table:
         add_button.grid(row=1, column=0)
         delete_button.grid(row=2, column=0)
 
-        add_order.pack(expand = 'yes', padx=15, pady=15)
-
         # Create Menu
         my_menu = Menu(root)
         root.config(menu=my_menu)
@@ -195,8 +210,6 @@ filepath = 'ClientPricelist2022_test.csv'
 File = open(filepath)
 Reader = csv.reader(File)
 Data = list(map(tuple, Reader)) # Converts into tuple
-
-#print(Data)
 
 #-------------------------------|Windows|-------------------------------
 # Orders window
