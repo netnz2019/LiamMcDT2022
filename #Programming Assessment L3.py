@@ -7,8 +7,6 @@
 #-------------------------------|Imports|-------------------------------
 from tkinter import *
 from tkinter import ttk
-from tkinter import dialog
-from tkinter import filedialog
 import csv # better than excel
 import pickle
 import time
@@ -16,10 +14,7 @@ import time
 #--------------------------------|Class|--------------------------------
 class Table:
      
-    def __init__(self, root):
-
-        # List for orders
-        lst = [("Inv. Num", "Client", "Address", "Total Cost", "Total RRP", "DoI", "Date Due", "Status")] # List of Orders
+    def __init__(self, root, lst):
 
         myscrollbar = ttk.Scrollbar(root, orient="vertical")
         myscrollbar.pack(side=RIGHT, fill=BOTH)
@@ -34,7 +29,7 @@ class Table:
         #myscrollbar.config(command=outer_frame.yview)
 
         # Groups widgets together
-        table_frame = LabelFrame(outer_frame, text="Product List")
+        table_frame = LabelFrame(outer_frame, text="Order List")
         table_frame.pack(expand = 'yes', padx=15, pady=15)
 
         # Code for creating table
@@ -48,15 +43,15 @@ class Table:
                     self.__x.set(lst[r][c])
 
                     if c == 1: # change width of product name labels
-                        self.l = Label(table_frame, textvariable=self.__x, width=20, fg='blue', font=('Arial',12,'bold'), justify='left')
+                        self.l = Label(table_frame, textvariable=self.__x, width=20, fg='blue', font=('Arial',12,'bold'))
                     elif c == 2:
-                        self.l = Label(table_frame, textvariable=self.__x, width=30, fg='blue', font=('Arial',12,'bold'), justify='left')
+                        self.l = Label(table_frame, textvariable=self.__x, width=30, fg='blue', font=('Arial',12,'bold'))
                     elif c == 0: # change width of product code labels
-                        self.l = Label(table_frame, textvariable=self.__x, width=10, fg='blue', font=('Arial',12,'bold'), justify="left")
+                        self.l = Label(table_frame, textvariable=self.__x, width=10, fg='blue', font=('Arial',12,'bold'))
                     elif r >= 1 and c == 7: # allows user to change status value
-                        self.l = Entry(table_frame, textvariable=self.__x, width=10, font=('Arial',12,'bold'), justify=RIGHT)
+                        self.l = Entry(table_frame, textvariable=self.__x, width=10, font=('Arial',12,'bold'))
                     else: # defualt Label settings
-                        self.l = Label(table_frame, textvariable=self.__x, width=10, fg='blue', font=('Arial',12,'bold'), justify=RIGHT)
+                        self.l = Label(table_frame, textvariable=self.__x, width=10, fg='blue', font=('Arial',12,'bold'))
 
                     self.l.grid(row=r, column=c)
         
@@ -75,7 +70,7 @@ class Table:
         #-------------------------------|Functions|-------------------------------
         # Button Functions
         def add(): # Makes order a tuple to then add to overall list
-            Num = 0
+            Num = 0 # resets counter
 
             order = (client_entry.get(), 
                     address_entry.get(), 
@@ -85,49 +80,57 @@ class Table:
                     datedue_entry.get(), 
                     status_entry.get())
 
-            for i in order:
-                if len(i) > 0:
-                    Num = Num + 1
-                    pass
-                else:
-                    pass
+            if totalcost_entry.get().isnumeric() == TRUE and totalrrp_entry.get().isnumeric() == TRUE: # Checks prices are numbers
+                totalcost = "${}".format(totalcost_entry.get())
+                totalrrp = "${}".format(totalrrp_entry.get())
+                for i in order:
+                    if len(i) > 0:
+                        Num = Num + 1 # Adds to counter
+                    else:
+                        __f = Label(add_order, text="ENTRY IS EMPTY", fg="red", font=('Arial',10,'bold'))
+                        __f.grid(row=2, column=7)            
+            else:
+                f = Label(add_order, text="Invalid Number", fg="red", font=('Arial',10,'bold'))
+                f.grid(row=2, column=3, columnspan=2) 
 
             InvNum = len(lst)
 
-            if Num == 7:
+            if Num == 7: # Checks counter
                 order = (InvNum, 
-                    client_entry.get(), 
-                    address_entry.get(), 
-                    totalcost_entry.get(), 
-                    totalrrp_entry.get(), 
-                    doi_entry.get(), 
-                    datedue_entry.get(), 
-                    status_entry.get())
+                        client_entry.get(), 
+                        address_entry.get(), 
+                        totalcost, 
+                        totalrrp, 
+                        doi_entry.get(), 
+                        datedue_entry.get(), 
+                        status_entry.get())
                 lst.append(order)
                 table() # Recalls table so that it is updated 
             else:
-                __f = Label(add_order, text="ENTRY IS EMPTY", fg="red", font=('Arial',10,'bold'))
-                __f.grid(row=2, column=7) 
+                pass
 
 
         def delete_order(): # function to delete unwanted orders
             if d.get().isnumeric() == TRUE:
-                for x in range(8):
-                    if x == 1: # gets rid of bottom order widgets and specifies width
-                        l = Label(table_frame, text="", width=20, fg='blue', font=('Arial',12,'bold'), justify='left')
-                    elif x == 2:
-                        l = Label(table_frame, text="", width=30, fg='blue', font=('Arial',12,'bold'), justify='left')
-                    elif x == 0: 
-                        l = Label(table_frame, text="", width=10, fg='blue', font=('Arial',12,'bold'), justify="left")
-                    else: 
-                        l = Label(table_frame, text="", width=10, fg='blue', font=('Arial',12,'bold'), justify=RIGHT)
-                    l.grid(row=len(lst)-1, column=x)
+                if int(d.get()) <= len(lst):
+                    print(len(lst))
+                    for x in range(8):
+                        if x == 1: # gets rid of bottom order widgets and specifies width
+                            l = Label(table_frame, text="", width=20, fg='blue', font=('Arial',12,'bold'))
+                        elif x == 2:
+                            l = Label(table_frame, text="", width=30, fg='blue', font=('Arial',12,'bold'))
+                        else: 
+                            l = Label(table_frame, text="", width=10, fg='blue', font=('Arial',12,'bold'))
+                        l.grid(row=len(lst)-1, column=x)
 
-                lst.pop(int(d.get()))
-                table() # updates table without selected order
+                    lst.pop(int(d.get()))
+                    table() # updates table without selected order
+
+                else:
+                    pass
             else:
-                __f = Label(add_order, text="ENTRY ISN'T A NUMBER", fg="red", font=('Arial',10,'bold'))
-                __f.grid(row=2, column=2)
+                b = Label(add_order, text="ENTRY ISN'T A NUMBER", fg="red", font=('Arial',10,'bold'))
+                b.grid(row=2, column=2)
 
 
 
@@ -211,13 +214,16 @@ File = open(filepath)
 Reader = csv.reader(File)
 Data = list(map(tuple, Reader)) # Converts into tuple
 
+# List for orders
+lst = [("Inv. Num", "Client", "Address", "Total Cost", "Total RRP", "DoI", "Date Due", "Status")] # List of Orders
+
 #-------------------------------|Windows|-------------------------------
 # Orders window
 root = Tk()
 root.title("Orders")
 root.geometry("1750x750") # might change this later
 
-t = Table(root)
+t = Table(root, lst)
 
 #---------------------------------|GUI|---------------------------------
 # Login Canvas
